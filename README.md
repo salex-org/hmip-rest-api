@@ -1,4 +1,4 @@
-# Java REST API Client for the Homematic IP Cloud
+# Java Client for the Homematic IP Cloud
 
 A Java wrapper for the RESP API of the Homematic IP Cloud.
 Since there is no offical documentation i used the code of the [Python wrapper](https://github.com/coreGreenberet/homematicip-rest-api)
