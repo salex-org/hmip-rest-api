@@ -22,15 +22,19 @@ public class Main implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         LOG.info("Registering new client");
-        var clientName = "Java Test";
-        var sgtin = "3014-F711-A000-03DD-89AD-F7FE";
-        HmIPCloud.registerClient(sgtin, clientName)
+        final var clientName = "Java Test";
+        final var accessPointSGTIN = "3014-F711-A000-03DD-89AD-F7FE";
+        HmIPCloud.registerClient(accessPointSGTIN, clientName)
                 .doOnError(error -> {
                     LOG.error("Failed to register new client");
                     SpringApplication.exit(context);
                     System.exit(1);
                 }).subscribe(client -> {
-                    LOG.info("Successfully registered new client.");
+                    LOG.info("Successfully registered new client");
+                    LOG.info(String.format("Device ID: %s", client.getDeviceId()));
+                    LOG.info(String.format("Client ID: %s", client.getClientId()));
+                    LOG.info(String.format("Client Auth Token: %s", client.getClientAuthToken()));
+                    LOG.info(String.format("Auth Token: %s", client.getAuthToken()));
                     LOG.info("Finished and saying goodbye");
                     System.exit(SpringApplication.exit(context));
                 });

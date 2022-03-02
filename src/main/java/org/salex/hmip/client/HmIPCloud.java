@@ -11,7 +11,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
-import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -42,13 +42,10 @@ public class HmIPCloud {
     }
 
     private static Mono<HmIPHosts> getHosts(HmIPClient client) {
-        var body = new HashMap<String, Object>();
-        var url = "https://lookup.homematic.com:48335";
-        body.put("clientCharacteristics", client.getCharacteristics());
-        body.put("id", client.getAccessPointSGTIN());
+        final var url = "https://lookup.homematic.com:48335";
         LOG.info(String.format("Lookup up for the hosts using %s", url));
         var webClient = WebClient.builder().baseUrl(url).build();
-        return webClient.post().uri("getHost").bodyValue(body).retrieve().bodyToMono(HmIPHosts.class);
+        return webClient.post().uri("getHost").bodyValue(client.jsonBodyBuilder().getHosts()).retrieve().bodyToMono(HmIPHosts.class);
     }
 
     public static Mono<HmIPClient> registerClient(String accessPointSGTIN, String clientName) {
@@ -57,12 +54,18 @@ public class HmIPCloud {
 
     public static Mono<HmIPClient> registerClient(String accessPointSGTIN, String clientName, String pin) {
         final var client = new HmIPClient();
-        client.setCharacteristics(HmIPClientCharacteristics.builder().applicationIdentifier(clientName).build());
-        client.setClientName(clientName);
+        client.setApiVersion("12");
+        client.setLanguage(Locale.getDefault().toLanguageTag());
+        client.setOsType(System.getProperty("os.name"));
+        client.setOsVersion(System.getProperty("os.version"));
         client.setAccessPointSGTIN(prepareSGTINForAPI(accessPointSGTIN));
-        client.setClientAuthToken(createClientAuthToken(client.getAccessPointSGTIN()));
-        client.setDeviceId(UUID.randomUUID().toString());
         client.setPin(pin);
+        client.setDeviceManufacturer("none");
+        client.setDeviceType("Computer");
+        client.setDeviceId(UUID.randomUUID().toString());
+        client.setClientName(clientName);
+        client.setClientVersion("1.0.0");
+        client.setClientAuthToken(createClientAuthToken(client.getAccessPointSGTIN()));
         return getHosts(client).flatMap(hosts -> {
             LOG.info(String.format("Using %s for further API calls", hosts.getRestURL()));
             return registerClient(client, hosts);
@@ -71,27 +74,21 @@ public class HmIPCloud {
 
     private static Mono<HmIPClient> registerClient(HmIPClient client, HmIPHosts hosts) {
         final var webClient = WebClient.builder()
-                .defaultHeader("VERSION", client.getCharacteristics().getApiVersion())
+                .defaultHeader("VERSION", client.getApiVersion())
                 .defaultHeader("CLIENTAUTH", client.getClientAuthToken())
                 .baseUrl(hosts.getRestURL())
                 .build();
-        var connectionRequestBody = new HashMap<String, Object>();
-        connectionRequestBody.put("deviceId", client.getDeviceId());
-        connectionRequestBody.put("deviceName", client.getClientName());
-        connectionRequestBody.put("sgtin", client.getAccessPointSGTIN());
         LOG.info(String.format("Registering client '%s' on device '%s' for access point with SGTIN '%s'",
                 client.getClientName(),
                 client.getDeviceId(),
                 client.getAccessPointSGTIN()));
-        return webClient.post().uri("hmip/auth/connectionRequest").bodyValue(connectionRequestBody).retrieve().toBodilessEntity().
+        return webClient.post().uri("hmip/auth/connectionRequest").bodyValue(client.jsonBodyBuilder().connectionRequest()).retrieve().toBodilessEntity().
                 flatMap(conReqResult -> {
                     LOG.info("Please press the blue button on the access point to acknowledge the client registration...");
-                    var body = new HashMap<String, Object>();
-                    body.put("deviceId", client.getDeviceId());
                     return webClient
                             .post()
                             .uri("hmip/auth/isRequestAcknowledged")
-                            .bodyValue(body)
+                            .bodyValue(client.jsonBodyBuilder().isRequestAcknowledged())
                             .retrieve()
                             .toBodilessEntity()
                             .retryWhen(Retry.fixedDelay(12, Duration.ofSeconds(5)))
@@ -105,7 +102,7 @@ public class HmIPCloud {
                                 return webClient
                                         .post()
                                         .uri("hmip/auth/requestAuthToken")
-                                        .bodyValue(body)
+                                        .bodyValue(client.jsonBodyBuilder().requestAuthToken())
                                         .retrieve()
                                         .bodyToMono(Map.class)
                                         .onErrorMap(error -> new HmIPException("Error requesting auth token for client", error))
@@ -118,11 +115,10 @@ public class HmIPCloud {
                                         })
                                         .flatMap(authToken -> {
                                             LOG.info("Confirming auth token");
-                                            body.put("authToken", authToken);
                                             return webClient
                                                     .post()
                                                     .uri("hmip/auth/confirmAuthToken")
-                                                    .bodyValue(body)
+                                                    .bodyValue(client.jsonBodyBuilder().confirmAuthToken())
                                                     .retrieve()
                                                     .bodyToMono(Map.class)
                                                     .onErrorMap(error -> new HmIPException("Error confirming auth token for client", error))
