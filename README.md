@@ -36,7 +36,7 @@ final var properties = ... // Should be injected
 HmIPConfiguration.builder()
     .properties(properties)
     .build()
-    .map(config -> new HmIPClient(config))
+    .map(HmIPClient::new)
     .flatMap(client -> client.loadCurrentState())
     .doOnError(error -> {
         LOG.error(String.format("Failed to load the current state: %s", error.getMessage()));
