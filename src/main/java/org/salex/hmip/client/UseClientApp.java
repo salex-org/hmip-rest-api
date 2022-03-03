@@ -10,6 +10,8 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Profile;
 
+import java.util.Map;
+
 /**
  * Spring Boot command line app to use an already registered client.
  */
@@ -45,7 +47,12 @@ public class UseClientApp implements CommandLineRunner {
                     }
                     LOG.info("Device:");
                     for (var device:currentState.getDevices().values()) {
-                        LOG.info(String.format("\t%s (%s)", device.getName(), device.getId()));
+                        LOG.info(String.format("\t%s (%s), Type: %s, Model: %s", device.getName(), device.getId(), device.getType(), device.getModel()));
+                        if("TEMPERATURE_HUMIDITY_SENSOR_OUTDOOR".equals(device.getType())) {
+                            var temperature = Double.valueOf(((Map<String, Object>)device.getChannels().get("1")).get("actualTemperature").toString());
+                            var humidity = Integer.valueOf(((Map<String, Object>)device.getChannels().get("1")).get("humidity").toString());
+                            LOG.info(String.format("\t\tMeasurement from %s: %.1f°C and %d%% humidity", device.getStatusTimestamp(), temperature, humidity));
+                        }
                     }
                     System.exit(SpringApplication.exit(context));
                 });

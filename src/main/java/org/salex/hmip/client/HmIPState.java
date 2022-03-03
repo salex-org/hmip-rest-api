@@ -2,6 +2,7 @@ package org.salex.hmip.client;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Date;
 import java.util.Map;
 
 public class HmIPState {
@@ -16,6 +17,10 @@ public class HmIPState {
         private String model;
         @JsonProperty("serializedGlobalTradeItemNumber")
         private String sgtin;
+        @JsonProperty("functionalChannels")
+        private Map<String, Object> channels;
+        @JsonProperty("lastStatusUpdate")
+        private Date statusTimestamp;
 
         public String getId() {
             return id;
@@ -35,6 +40,14 @@ public class HmIPState {
 
         public String getSGTIN() {
             return sgtin;
+        }
+
+        public Map<String, Object> getChannels() {
+            return channels;
+        }
+
+        public Date getStatusTimestamp() {
+            return statusTimestamp;
         }
     }
     public static class Client {
