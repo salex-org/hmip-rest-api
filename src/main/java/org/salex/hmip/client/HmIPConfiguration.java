@@ -307,6 +307,8 @@ public class HmIPConfiguration {
                 });
     }
 
+    private HmIPConfiguration() {}
+
     public String getApiVersion() {
         return apiVersion;
     }
