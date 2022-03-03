@@ -27,7 +27,6 @@ public class HmIPClient {
                 .defaultHeader("VERSION", config.getApiVersion())
                 .defaultHeader("CLIENTAUTH", config.getClientAuthToken())
                 .defaultHeader("AUTHTOKEN", config.getAuthToken())
-                .defaultHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                 .baseUrl(config.getApiEndpoint())
                 .build();
     }
