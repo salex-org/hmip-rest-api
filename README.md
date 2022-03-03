@@ -45,6 +45,7 @@ HmIPConfiguration.builder()
     .subscribe(currentState -> {
         LOG.info("Successfully loaded the current state");
         ...
+        // Do some world-improving things :-)
     });
 ```
 
@@ -68,7 +69,8 @@ HmIPConfiguration.builder()
         LOG.info(String.format("Client Auth Token: %s", config.getClientAuthToken()));
         LOG.info(String.format("Auth Token: %s", config.getAuthToken()));
         ...
-        // Encrypt these values and put them to the configuration of your client app for lates usage
+        // Encrypt these values and put them to the configuration
+        // of your client app for later usage
     });
 ```
 All you need is the SGTIN (Serialized Global Trade Item Number) of your access point, the PIN (if you have assigned one)
