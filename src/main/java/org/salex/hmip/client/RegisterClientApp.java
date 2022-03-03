@@ -7,13 +7,15 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Profile;
 
 /**
  * Spring Boot command line app to register a new client.
  */
 @SpringBootApplication
-public class Main implements CommandLineRunner {
-    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
+@Profile("register")
+public class RegisterClientApp implements CommandLineRunner {
+    private static final Logger LOG = LoggerFactory.getLogger(RegisterClientApp.class);
 
     @Autowired
     private ConfigurableApplicationContext context;
@@ -24,7 +26,7 @@ public class Main implements CommandLineRunner {
             LOG.info("Usage: <executable> <access-point-sgtin> <client-name>");
             System.exit(1);
         } else {
-            SpringApplication.run(Main.class, args);
+            SpringApplication.run(RegisterClientApp.class, args);
         }
     }
 
@@ -47,7 +49,6 @@ public class Main implements CommandLineRunner {
                     LOG.info(String.format("Client ID: %s", config.getClientId()));
                     LOG.info(String.format("Client Auth Token: %s", config.getClientAuthToken()));
                     LOG.info(String.format("Auth Token: %s", config.getAuthToken()));
-                    LOG.info("Finished and saying goodbye");
                     System.exit(SpringApplication.exit(context));
                 });
     }

@@ -13,14 +13,13 @@ import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
 import java.util.UUID;
 
 /**
  * Configuration for a Homematic IP Cloud client.
  * Use {@link Builder} to get an instance.
  * Use {@link #registerClient()} to register a new client in the cloud.
- * Use {@link Builder#properties(Properties)} to load config data for existing client.
+ * Use {@link Builder#properties(HmIPProperties)} to load config data for existing client.
  */
 public class HmIPConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(HmIPConfiguration.class);
@@ -103,7 +102,7 @@ public class HmIPConfiguration {
                     "applicationVersion", clientVersion,
                     "deviceManufacturer", deviceManufacturer,
                     "deviceType", deviceType,
-                    "languange", language,
+                    "language", language,
                     "osType", osType,
                     "osVersion", osVersion
             );
@@ -129,7 +128,7 @@ public class HmIPConfiguration {
             config.deviceManufacturer = "none";
             config.deviceType = "Computer";
             config.deviceId = UUID.randomUUID().toString();
-            config.clientName = "Java Client";
+            config.clientName = "Java-Client";
             config.clientVersion = "1.0.0";
         }
 
@@ -209,8 +208,28 @@ public class HmIPConfiguration {
             return this;
         }
 
-        public Builder properties(Properties properties) {
-            // TODO Load parameter from properties
+        public Builder properties(HmIPProperties properties) {
+            if(properties.getAccessPointSGTIN() != null) {
+                config.accessPointSGTIN = properties.getAccessPointSGTIN();
+            }
+            if(properties.getPin() != null) {
+                config.pin = properties.getPin();
+            }
+            if(properties.getDeviceId() != null) {
+                config.deviceId = properties.getDeviceId();
+            }
+            if(properties.getClientId() != null) {
+                config.clientId = properties.getClientId();
+            }
+            if(properties.getClientName() != null) {
+                config.clientName = properties.getClientName();
+            }
+            if(properties.getClientAuthToken() != null) {
+                config.clientAuthToken = properties.getClientAuthToken();
+            }
+            if(properties.getAuthToken() != null) {
+                config.authToken = properties.getAuthToken();
+            }
             return this;
         }
 
@@ -308,6 +327,10 @@ public class HmIPConfiguration {
     }
 
     private HmIPConfiguration() {}
+
+    public String getApiEndpoint() {
+        return apiEndpoint;
+    }
 
     public String getApiVersion() {
         return apiVersion;
