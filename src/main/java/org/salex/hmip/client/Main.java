@@ -8,6 +8,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
+/**
+ * Spring Boot command line app to register a new client.
+ */
 @SpringBootApplication
 public class Main implements CommandLineRunner {
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);
@@ -16,17 +19,26 @@ public class Main implements CommandLineRunner {
     private ConfigurableApplicationContext context;
 
     public static void main(String[] args) {
-        SpringApplication.run(Main.class, args);
+        if(args.length < 2) {
+            LOG.error("Missing arguments");
+            LOG.info("Usage: <executable> <access-point-sgtin> <client-name>");
+            System.exit(1);
+        } else {
+            SpringApplication.run(Main.class, args);
+        }
     }
 
     @Override
     public void run(String... args) throws Exception {
-        LOG.info("Registering new client");
-        final var clientName = "Java Test";
-        final var accessPointSGTIN = "3014-F711-A000-03DD-89AD-F7FE";
-        HmIPCloud.registerClient(accessPointSGTIN, clientName)
+        final var accessPointSGTIN = args[0];
+        final var clientName = args[1];
+        HmIPConfiguration.builder()
+                .clientName(clientName)
+                .accessPointSGTIN(accessPointSGTIN)
+                .build()
+                .flatMap(config -> config.registerClient())
                 .doOnError(error -> {
-                    LOG.error("Failed to register new client");
+                    LOG.error(String.format("Failed to register new client: %s", error.getMessage()));
                     SpringApplication.exit(context);
                     System.exit(1);
                 }).subscribe(client -> {
