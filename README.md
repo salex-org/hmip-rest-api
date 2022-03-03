@@ -19,7 +19,7 @@ org:
         pin: '{cipher}<some-encrypted-value>'
         device-id: '{cipher}<some-encrypted-value>'
         client-id: '{cipher}<some-encrypted-value>'
-        client-name: '<some-plan-value>'
+        client-name: '<some-value>'
         client-auth-token: '{cipher}<some-encrypted-value>'
         auth-token: '{cipher}<some-encrypted-value>'
 ```
