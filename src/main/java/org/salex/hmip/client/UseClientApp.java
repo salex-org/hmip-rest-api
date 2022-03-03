@@ -23,7 +23,7 @@ public class UseClientApp implements CommandLineRunner {
     private ConfigurableApplicationContext context;
 
     @Autowired
-    private HmIPProperties properties;
+    private HmIPClient client;
 
     public static void main(String[] args) {
         SpringApplication.run(UseClientApp.class, args);
@@ -31,11 +31,7 @@ public class UseClientApp implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        HmIPConfiguration.builder()
-                .properties(properties)
-                .build()
-                .map(HmIPClient::new)
-                .flatMap(client -> client.loadCurrentState())
+        client.loadCurrentState()
                 .doOnError(error -> {
                     LOG.error(String.format("Failed to load the current state: %s", error.getMessage()), error);
                     SpringApplication.exit(context);

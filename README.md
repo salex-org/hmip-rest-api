@@ -49,6 +49,19 @@ HmIPConfiguration.builder()
     });
 ```
 
+As an alternative you can create the client in a bean method so that you can use it by injection:
+
+```java
+@Bean
+HmIPClient createHomematicClient(HmIPProperties properties) {
+    return HmIPConfiguration.builder()
+            .properties(properties)
+            .build()
+            .map(HmIPClient::new)
+            .block();
+}
+```
+
 # Registering a new client
 To register a new client in the Homematic IP Cloud you can use the client library:
 ```java
