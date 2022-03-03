@@ -18,13 +18,15 @@ HmIPConfiguration.builder()
     .doOnError(error -> {
         LOG.error(String.format("Failed to register new client: %s", error.getMessage()));
         ...
-    }).subscribe(client -> {
+    }).subscribe(config -> {
         LOG.info("Successfully registered new client");
-        LOG.info(String.format("Device ID: %s", client.getDeviceId()));
-        LOG.info(String.format("Client ID: %s", client.getClientId()));
-        LOG.info(String.format("Client Auth Token: %s", client.getClientAuthToken()));
-        LOG.info(String.format("Auth Token: %s", client.getAuthToken()));
+        LOG.info(String.format("Device ID: %s", config.getDeviceId()));
+        LOG.info(String.format("Client ID: %s", config.getClientId()));
+        LOG.info(String.format("Client Auth Token: %s", config.getClientAuthToken()));
+        LOG.info(String.format("Auth Token: %s", config.getAuthToken()));
         ...
+        final var client = new HmIPClient(config);
+        // Do something meaningful with the new registered client
     });
 ```
 All you need is the SGTIN of your access point and a name for the client. You also have to acknowledge the client

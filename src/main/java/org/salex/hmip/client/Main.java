@@ -41,12 +41,12 @@ public class Main implements CommandLineRunner {
                     LOG.error(String.format("Failed to register new client: %s", error.getMessage()));
                     SpringApplication.exit(context);
                     System.exit(1);
-                }).subscribe(client -> {
+                }).subscribe(config -> {
                     LOG.info("Successfully registered new client");
-                    LOG.info(String.format("Device ID: %s", client.getDeviceId()));
-                    LOG.info(String.format("Client ID: %s", client.getClientId()));
-                    LOG.info(String.format("Client Auth Token: %s", client.getClientAuthToken()));
-                    LOG.info(String.format("Auth Token: %s", client.getAuthToken()));
+                    LOG.info(String.format("Device ID: %s", config.getDeviceId()));
+                    LOG.info(String.format("Client ID: %s", config.getClientId()));
+                    LOG.info(String.format("Client Auth Token: %s", config.getClientAuthToken()));
+                    LOG.info(String.format("Auth Token: %s", config.getAuthToken()));
                     LOG.info("Finished and saying goodbye");
                     System.exit(SpringApplication.exit(context));
                 });
