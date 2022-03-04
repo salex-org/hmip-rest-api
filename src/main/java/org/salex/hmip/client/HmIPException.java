@@ -1,7 +1,7 @@
 package org.salex.hmip.client;
 
 /**
- * Exception for error in the Homematip IP Cloud client library.
+ * Exception for errors in the Homematip IP Cloud client library.
  */
 public class HmIPException extends RuntimeException {
     public HmIPException(String message) {

@@ -32,13 +32,4 @@ public class HmIPClient {
                 .retrieve()
                 .bodyToMono(HmIPState.class);
     }
-
-    public Mono<Void> deleteThisClient() {
-        return deleteClient(this.config.getClientId());
-    }
-
-    public Mono<Void> deleteClient(String clientId) {
-        // TODO implement rest call
-        return Mono.empty();
-    }
 }

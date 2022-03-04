@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 import java.util.Map;
 
+/**
+ * Representing parts of the Current State requested from the Homemativ IP Cloud.
+ */
 public class HmIPState {
     public static class Device {
         @JsonProperty("id")

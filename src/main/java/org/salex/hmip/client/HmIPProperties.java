@@ -3,6 +3,10 @@ package org.salex.hmip.client;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
+/**
+ * Properties for the configuration of the client library.
+ * Can be used when building a client configuration (see {@link HmIPConfiguration.Builder#properties(HmIPProperties)}).
+ */
 @ConfigurationProperties(prefix = "org.salex.hmip.client")
 @ConstructorBinding
 public class HmIPProperties {
