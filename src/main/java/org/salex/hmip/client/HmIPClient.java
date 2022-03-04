@@ -1,5 +1,6 @@
 package org.salex.hmip.client;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -24,12 +25,12 @@ public class HmIPClient {
                 .build();
     }
 
-    public Mono<HmIPState> loadCurrentState() {
+    public Mono<JsonNode> loadCurrentState() {
         return webClient
                 .post()
                 .uri("hmip/home/getCurrentState")
                 .bodyValue(config.jsonBodyBuilder().getCurrentState())
                 .retrieve()
-                .bodyToMono(HmIPState.class);
+                .bodyToMono(JsonNode.class);
     }
 }
