@@ -25,8 +25,8 @@ org:
 ```
 **You should not store any tokens or other secrets as plain text in the configuration!**
 
-I use the [property encryption feature of Spring Cloud Config](https://cloud.spring.io/spring-cloud-static/spring-cloud-config/1.3.0.RELEASE/#_encryption_and_decryption) to decrypt the
-secret configuration values, and I use the [Spring Cloud CLI for manual encryption](https://cloud.spring.io/spring-cloud-cli/reference/html/#_encryption_and_decryption)
+You can use the [property encryption feature of Spring Cloud Config](https://cloud.spring.io/spring-cloud-static/spring-cloud-config/1.3.0.RELEASE/#_encryption_and_decryption) to decrypt the
+secret configuration values, and the [Spring Cloud CLI for manual encryption](https://cloud.spring.io/spring-cloud-cli/reference/html/#_encryption_and_decryption)
 of the values. You can provide the encryption key by setting the environment variable `ENCRYPT_KEY`.
 
 With the loaded (and decrypted) properties you can easily create and use the client:
