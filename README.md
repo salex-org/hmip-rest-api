@@ -90,5 +90,8 @@ All you need is the SGTIN (Serialized Global Trade Item Number) of your access p
 and a name for the client. You also have to acknowledge the client registration by pressing the "blue button" on your
 access point, when you are prompted in the log.
 
+# Examples
+Please find some examples in the [Examples-Project](https://github.com/sagaert/hmip-rest-api-examples)
+
 # Work in Progress
 The development of the library is 'work in progress', so actually only a few features are available. 
