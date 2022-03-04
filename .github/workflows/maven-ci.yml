@@ -1,4 +1,4 @@
-name: Java CI with Maven
+name: Build and test the library
 on:
   push:
     branches: [ main ]
@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 jobs:
   build:
-    name: Build with Maven
+    name: Build and test the library
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -19,5 +19,5 @@ jobs:
         distribution: 'adopt-openj9'
         cache: maven
         
-    - name: Build with Maven
+    - name: Build
       run: mvn --batch-mode package --file pom.xml
