@@ -1,6 +1,8 @@
 package org.salex.hmip.client;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import java.util.Date;
 import java.util.Map;
@@ -21,7 +23,7 @@ public class HmIPState {
         @JsonProperty("serializedGlobalTradeItemNumber")
         private String sgtin;
         @JsonProperty("functionalChannels")
-        private Map<String, Object> channels;
+        private Map<String, FunctionalChannel> channels;
         @JsonProperty("lastStatusUpdate")
         private Date statusTimestamp;
 
@@ -45,7 +47,7 @@ public class HmIPState {
             return sgtin;
         }
 
-        public Map<String, Object> getChannels() {
+        public Map<String, FunctionalChannel> getChannels() {
             return channels;
         }
 
@@ -53,11 +55,37 @@ public class HmIPState {
             return statusTimestamp;
         }
     }
+    @JsonTypeInfo(use=JsonTypeInfo.Id.NAME, property="functionalChannelType", defaultImpl = FunctionalChannel.class)
+    @JsonSubTypes({
+            @JsonSubTypes.Type(value = ClimateSensorChannel.class, name = "CLIMATE_SENSOR_CHANNEL")
+    })
     public static class FunctionalChannel  {
+        @JsonProperty("functionalChannelType")
+        private String type;
 
+        public String getType() {
+            return type;
+        }
     }
     public static class ClimateSensorChannel extends FunctionalChannel {
+        @JsonProperty("actualTemperature")
+        private double temperature;
+        @JsonProperty("humidity")
+        private int humidity;
+        @JsonProperty("vaporAmount")
+        private double vaporAmount;
 
+        public double getTemperature() {
+            return temperature;
+        }
+
+        public int getHumidity() {
+            return humidity;
+        }
+
+        public double getVaporAmount() {
+            return vaporAmount;
+        }
     }
     public static class Client {
         @JsonProperty("id")
