@@ -39,6 +39,17 @@ public class HmIPClient {
         return webSocketClient.execute(URI.create(config.getWebsocketEndpoint()), headers, handler);
     }
 
+    public Flux<HmIPSecurityEvent> getSecurityJournal() {
+        return webClient
+                .post()
+                .uri("hmip/home/security/getSecurityJournal")
+                .bodyValue(config.jsonBodyBuilder().getCurrentState())
+                .retrieve()
+                .bodyToMono(HmIPSecurityJournal.class)
+                .map(HmIPSecurityJournal::getEntries)
+                .flatMapMany(Flux::fromIterable);
+    }
+
     public Flux<HmIPState.Client> getClients() {
         return loadCurrentState()
                 .map(state -> state.getClients().values())
