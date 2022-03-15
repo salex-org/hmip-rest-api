@@ -5,6 +5,16 @@ Since there is no offical documentation i used the code of the [Python wrapper](
 to get an idea of how the API works. Thanks to [coreGreenberet](https://github.com/coreGreenberet) for doing the great job of
 reverse engineering. **Use this library at your own risk!**
 
+# Dependency
+To use the library, add the following dependency to your `pom.xml`:
+```xml 
+<dependency>
+    <groupId>org.salex.hmip</groupId>
+    <artifactId>client</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
 # Loading the configuration and getting the current state
 To load the configuration for the client from an `application.yml` you can use the class
 `org.salex.hmip.client.HmIPProperties`. Include it into the configuration properties scan
