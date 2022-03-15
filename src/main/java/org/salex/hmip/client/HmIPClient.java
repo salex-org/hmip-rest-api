@@ -3,9 +3,14 @@ package org.salex.hmip.client;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.socket.WebSocketHandler;
+import org.springframework.web.reactive.socket.client.ReactorNettyWebSocketClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.net.URI;
 
 /**
  * Client for the Homematic IP Cloud.
@@ -24,6 +29,14 @@ public class HmIPClient {
                 .defaultHeader("AUTHTOKEN", config.getAuthToken())
                 .baseUrl(config.getApiEndpoint())
                 .build();
+    }
+
+    public Mono<Void> startWebSocketClient(WebSocketHandler handler) {
+        var webSocketClient = new ReactorNettyWebSocketClient();
+        var headers = new HttpHeaders();
+        headers.set("AUTHTOKEN", config.getAuthToken());
+        headers.set("CLIENTAUTH", config.getClientAuthToken());
+        return webSocketClient.execute(URI.create(config.getWebsocketEndpoint()), headers, handler);
     }
 
     public Flux<HmIPState.Client> getClients() {

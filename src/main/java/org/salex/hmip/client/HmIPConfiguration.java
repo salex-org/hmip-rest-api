@@ -26,6 +26,7 @@ public class HmIPConfiguration {
     private static final String LOOKUP_ENDPOINT = "https://lookup.homematic.com:48335";
 
     private String apiEndpoint;
+    private String websocketEndpoint;
     private String apiVersion;
     private String language;
 
@@ -248,9 +249,17 @@ public class HmIPConfiguration {
                     .flatMap(result -> {
                         if(result.containsKey("urlREST")) {
                             config.apiEndpoint = result.get("urlREST").toString();
-                            return Mono.just(config);
+                            return Mono.just(result);
                         } else {
                             return Mono.error(new HmIPException("No URL for REST API received"));
+                        }
+                    })
+                    .flatMap(result -> {
+                        if(result.containsKey("urlWebSocket")) {
+                            config.websocketEndpoint = result.get("urlWebSocket").toString();
+                            return Mono.just(config);
+                        } else {
+                            return Mono.error(new HmIPException("No URL for WebSocket received"));
                         }
                     });
         }
@@ -330,6 +339,10 @@ public class HmIPConfiguration {
 
     public String getApiEndpoint() {
         return apiEndpoint;
+    }
+
+    public String getWebsocketEndpoint() {
+        return websocketEndpoint;
     }
 
     public String getApiVersion() {
