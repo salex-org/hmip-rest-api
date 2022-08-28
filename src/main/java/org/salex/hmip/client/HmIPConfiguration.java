@@ -235,33 +235,7 @@ public class HmIPConfiguration {
         }
 
         public Mono<HmIPConfiguration> build() {
-            final var webClient = WebClient.builder()
-                    .baseUrl(LOOKUP_ENDPOINT)
-                    .build();
-            LOG.info(String.format("Lookup up for the hosts using %s", LOOKUP_ENDPOINT));
-            return webClient
-                    .post()
-                    .uri("getHost")
-                    .bodyValue(config.jsonBodyBuilder().getHosts())
-                    .retrieve()
-                    .bodyToMono(Map.class)
-                    .onErrorMap(error -> new HmIPException("Error looking up the hosts", error))
-                    .flatMap(result -> {
-                        if(result.containsKey("urlREST")) {
-                            config.apiEndpoint = result.get("urlREST").toString();
-                            return Mono.just(result);
-                        } else {
-                            return Mono.error(new HmIPException("No URL for REST API received"));
-                        }
-                    })
-                    .flatMap(result -> {
-                        if(result.containsKey("urlWebSocket")) {
-                            config.websocketEndpoint = result.get("urlWebSocket").toString();
-                            return Mono.just(config);
-                        } else {
-                            return Mono.error(new HmIPException("No URL for WebSocket received"));
-                        }
-                    });
+            return config.lookupEndpoints();
         }
     }
 
@@ -331,6 +305,36 @@ public class HmIPConfiguration {
                         return Mono.just(this);
                     } else {
                         return Mono.error(new HmIPException("No client ID received"));
+                    }
+                });
+    }
+
+    public Mono<HmIPConfiguration> lookupEndpoints() {
+        final var webClient = WebClient.builder()
+                .baseUrl(LOOKUP_ENDPOINT)
+                .build();
+        LOG.info(String.format("Lookup up for the hosts using %s", LOOKUP_ENDPOINT));
+        return webClient
+                .post()
+                .uri("getHost")
+                .bodyValue(jsonBodyBuilder().getHosts())
+                .retrieve()
+                .bodyToMono(Map.class)
+                .onErrorMap(error -> new HmIPException("Error looking up the hosts", error))
+                .flatMap(result -> {
+                    if(result.containsKey("urlREST")) {
+                        apiEndpoint = result.get("urlREST").toString();
+                        return Mono.just(result);
+                    } else {
+                        return Mono.error(new HmIPException("No URL for REST API received"));
+                    }
+                })
+                .flatMap(result -> {
+                    if(result.containsKey("urlWebSocket")) {
+                        websocketEndpoint = result.get("urlWebSocket").toString();
+                        return Mono.just(this);
+                    } else {
+                        return Mono.error(new HmIPException("No URL for WebSocket received"));
                     }
                 });
     }

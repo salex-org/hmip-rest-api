@@ -9,6 +9,7 @@ import org.springframework.web.reactive.socket.WebSocketHandler;
 import org.springframework.web.reactive.socket.client.ReactorNettyWebSocketClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
 import java.net.URI;
 
@@ -27,7 +28,6 @@ public class HmIPClient {
                 .defaultHeader("VERSION", config.getApiVersion())
                 .defaultHeader("CLIENTAUTH", config.getClientAuthToken())
                 .defaultHeader("AUTHTOKEN", config.getAuthToken())
-                .baseUrl(config.getApiEndpoint())
                 .build();
     }
 
@@ -42,7 +42,7 @@ public class HmIPClient {
     public Flux<HmIPSecurityEvent> getSecurityJournal() {
         return webClient
                 .post()
-                .uri("hmip/home/security/getSecurityJournal")
+                .uri(config.getApiEndpoint() + "/hmip/home/security/getSecurityJournal")
                 .bodyValue(config.jsonBodyBuilder().getCurrentState())
                 .retrieve()
                 .bodyToMono(HmIPSecurityJournal.class)
@@ -81,16 +81,17 @@ public class HmIPClient {
     public Mono<HmIPState> loadCurrentState() {
         return webClient
                 .post()
-                .uri("hmip/home/getCurrentState")
+                .uri(config.getApiEndpoint() + "/hmip/home/getCurrentState")
                 .bodyValue(config.jsonBodyBuilder().getCurrentState())
                 .retrieve()
-                .bodyToMono(HmIPState.class);
-    }
+                .bodyToMono(HmIPState.class)
+                .retryWhen(Retry.max(1).doBeforeRetryAsync(signal -> this.config.lookupEndpoints().then()));
+    }   
 
     public Mono<JsonNode> loadCurrentStateJson() {
         return webClient
                 .post()
-                .uri("hmip/home/getCurrentState")
+                .uri(config.getApiEndpoint() + "/hmip/home/getCurrentState")
                 .bodyValue(config.jsonBodyBuilder().getCurrentState())
                 .retrieve()
                 .bodyToMono(JsonNode.class);
