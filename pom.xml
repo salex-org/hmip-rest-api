@@ -9,7 +9,7 @@
 
 	<name>Java client for the Homematic IP Cloud</name>
 	<description>A Java wrapper for the RESP API of the Homematic IP Cloud</description>
-	<url>https://github.com/sagaert/hmip-rest-api</url>
+	<url>https://github.com/salex-org/hmip-rest-api</url>
 
 	<licenses>
 		<license>
@@ -23,14 +23,14 @@
 			<name>Sascha Gärtner</name>
 			<email>sascha.gaertner@salex.org</email>
 			<organization>salex.org</organization>
-			<organizationUrl>https://github.com/sagaert</organizationUrl>
+			<organizationUrl>https://github.com/salex-org</organizationUrl>
 		</developer>
 	</developers>
 
 	<scm>
-		<connection>scm:git:git://github.com/sagaert/hmip-rest-api.git</connection>
-		<developerConnection>scm:git:ssh://github.com:sagaert/hmip-rest-api.git</developerConnection>
-		<url>https://github.com/sagaert/hmip-rest-api/tree/main</url>
+		<connection>scm:git:git://github.com/salex-org/hmip-rest-api.git</connection>
+		<developerConnection>scm:git:ssh://github.com:salex-org/hmip-rest-api.git</developerConnection>
+		<url>https://github.com/salex-org/hmip-rest-api/tree/main</url>
 	</scm>
 
 	<properties>
