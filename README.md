@@ -40,8 +40,7 @@ After that, you can add a dependency to a SNAPSHOT-Version:
 </dependency>
 ```
 
-*Attention: It is not recommended to use SNAPSHOT-Versions as they are
-'work in progress' with less stability!*
+**It is not recommended to use SNAPSHOT-Versions as they are 'work in progress' with less stability!**
 
 # Loading the configuration and getting the current state
 To load the configuration for the client from an `application.yml` you can use the class
