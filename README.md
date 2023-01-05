@@ -15,6 +15,31 @@ To use the library, add the following dependency to your `pom.xml`:
 </dependency>
 ```
 
+## Using SNAPHOT-Versions
+The SNAPSHOT-Versions from CI builds will be published in GitHub Packages.
+To use a SNAPSHOT-Version you first you have to add the repository to your `pom.xml`:
+```xml
+<repositories>
+    <repository>
+        <id>github</id>
+        <name>GitHub Packages</name>
+        <url>https://maven.pkg.github.com/salex-org/hmip-rest-api</url>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
+    </repository>
+</repositories>
+```
+
+After that, you can add a depedency to a SNAPSHOT-Version:
+```xml 
+<dependency>
+    <groupId>org.salex.hmip</groupId>
+    <artifactId>client</artifactId>
+    <version>1.1.0-SNAPSHOT</version>
+</dependency>
+```
+
 # Loading the configuration and getting the current state
 To load the configuration for the client from an `application.yml` you can use the class
 `org.salex.hmip.client.HmIPProperties`. Include it into the configuration properties scan
