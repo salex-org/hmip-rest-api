@@ -15,7 +15,7 @@ To use the library, add the following dependency to your `pom.xml`:
 </dependency>
 ```
 
-## Using SNAPHOT-Versions
+## Using SNAPHOT-Versions (not recommended)
 The SNAPSHOT-Versions from CI builds will be published in GitHub Packages.
 To use a SNAPSHOT-Version you first you have to add the repository to your `pom.xml`:
 ```xml
@@ -31,7 +31,7 @@ To use a SNAPSHOT-Version you first you have to add the repository to your `pom.
 </repositories>
 ```
 
-After that, you can add a depedency to a SNAPSHOT-Version:
+After that, you can add a dependency to a SNAPSHOT-Version:
 ```xml 
 <dependency>
     <groupId>org.salex.hmip</groupId>
@@ -39,6 +39,9 @@ After that, you can add a depedency to a SNAPSHOT-Version:
     <version>1.1.0-SNAPSHOT</version>
 </dependency>
 ```
+
+*Attention: It is not recommended to use SNAPSHOT-Versions as they are
+'work in progress' with less stability!*
 
 # Loading the configuration and getting the current state
 To load the configuration for the client from an `application.yml` you can use the class
