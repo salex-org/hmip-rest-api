@@ -19,5 +19,5 @@ jobs:
         distribution: 'adopt-openj9'
         cache: maven
         
-    - name: Build
-      run: mvn --batch-mode package --file pom.xml
+    - name: Build snaphot and publish to GitHub Packages
+      run: mvn --batch-mode deploy --file pom.xml -Ppublish-snapshot
