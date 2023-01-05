@@ -15,7 +15,7 @@ To use the library, add the following dependency to your `pom.xml`:
 </dependency>
 ```
 
-## Using SNAPHOT-Versions (not recommended)
+## Using SNAPSHOT-Versions (not recommended)
 The SNAPSHOT-Versions from CI builds will be published in GitHub Packages.
 To use a SNAPSHOT-Version you first you have to add the repository to your `pom.xml`:
 ```xml
