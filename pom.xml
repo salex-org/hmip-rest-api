@@ -62,7 +62,20 @@
 
 	<profiles>
 		<profile>
-			<id>publish</id>
+			<id>publish-snapshot</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<distributionManagement>
+				<repository>
+					<id>github</id>
+					<name>GitHub Packages</name>
+					<url>https://maven.pkg.github.com/salex-org/hmip-rest-api</url>
+				</repository>
+			</distributionManagement>
+		</profile>
+		<profile>
+			<id>publish-release</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
