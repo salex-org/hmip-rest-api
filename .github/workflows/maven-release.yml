@@ -34,7 +34,7 @@ jobs:
           git commit -m "updating version to ${{ github.event.inputs.version }} in pom"
           git tag -a v${{ github.event.inputs.version }} -m "tagging version ${{ github.event.inputs.version }}"
           git push --tags
-          mvn --batch-mode deploy -Ppublish
+          mvn --batch-mode deploy -Ppublish-release
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
