@@ -101,7 +101,7 @@ and a name for the client. You also have to acknowledge the client registration 
 access point, when you are prompted in the log.
 
 # Examples
-Please find some examples in the [Examples-Project](https://github.com/sagaert/hmip-rest-api-examples)
+Please find some examples in the [Examples-Project](https://github.com/salex-org/hmip-rest-api-examples)
 
 # Work in Progress
 The development of the library is 'work in progress', so actually only a few features are available. 
